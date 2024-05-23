@@ -1,11 +1,11 @@
 import csv
 
-def conversion(input_file, output_file, modification_function):
+def conversion(input_file, output_file):
     # Lire le fichier CSV
     with open(input_file, mode='r', newline='', encoding='utf-8') as infile:
         reader = csv.reader(infile)
         rows = list(reader)
-
+    print(rows)
     # Modifier les données
     modified_rows = modification_function(rows)
 
@@ -18,11 +18,19 @@ def conversion(input_file, output_file, modification_function):
 def modification_function(rows):
     modified_rows = []
 
-    # Traiter la première ligne
     first_row = rows[0]
-    first_line = ','.join(first_row)
-    modified_first_line = first_line.replace(',', ';')
-    modified_rows.append(modified_first_line.split(';'))
+
+    # Ajouter la première ligne modifiée à la liste des lignes modifiées
+    line = ','.join(first_row)
+    new_line = ''
+    for char in line:
+        if char == ',':
+            new_line += ';'
+        else:
+            new_line += char
+    new_line = new_line[:-1]
+    modified_row = new_line.split(',')
+    modified_rows.append(modified_row)
 
     # Indices des virgules à remplacer pour les autres lignes
     indices_to_replace = [0, 2, 4, 5, 6]
@@ -32,6 +40,7 @@ def modification_function(rows):
         line = ','.join(row)
         new_line = ''
         comma_count = 0
+
 
         for i, char in enumerate(line):
             if char == ',':
@@ -45,5 +54,4 @@ def modification_function(rows):
 
         modified_row = new_line.split(',')
         modified_rows.append(modified_row)
-
     return modified_rows
