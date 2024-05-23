@@ -2,6 +2,9 @@ import csv
 import matplotlib.pyplot as plt
 import matplotlib
 from conversion import conversion
+import os
+from mosaique import plot_graphs
+from process import process_csv
 
 # Utiliser le backend 'Agg' de Matplotlib
 matplotlib.use('Agg')
@@ -17,20 +20,21 @@ def interface ():
     x = input()
 
     if x == "1" :
-        input_file = input("name input file")
-        output_file = input("name output file")
+        print("(format : test.csv)")
+        input_file = input("name input file : ")
+        output_file = input("name output file : ")
         conversion(input_file, output_file)
 
     if x == "2" :
-        ...
+        visualize_results()
     if x == "3" :
-        ...
+        plot_graphs()
     else:
-        print ("invalid value")
-
+        print("invalid value")
+'''
 def process_csv(file_name):
     # Concaténer le nom de fichier avec ".csv"
-    csv_file = file_name + '.csv'
+    csv_file = 'data/'+ file_name + '.csv'
 
     # Liste pour stocker les titres des colonnes et les données
     column_titles = []
@@ -50,48 +54,33 @@ def process_csv(file_name):
                 impedance = float(row[1].strip().replace(',', '.'))
                 data.append([frequency, impedance])
             except ValueError as e:
-                print(f"Erreur de conversion sur la ligne : {row}, erreur: {e}")
+                print(f"Conversion error on line : {row}, error: {e}")
 
     # Afficher les titres des colonnes
-    print("Titres des colonnes : ", column_titles)
+    #print("Titres des colonnes : ", column_titles)
 
     # Afficher les premières lignes des données pour vérifier
     for row in data[:5]:
-        print(row)
+        ...#print(row)
 
     # Appeler find_peaks pour trouver les fréquences correspondant aux pics d'impédance
     peak_frequencies = find_peaks(data)
 
     # Retourner les titres, les données, et les pics de fréquence
     return column_titles, data, peak_frequencies
+'''
 
 
-def find_peaks(data):
-    frequencies = []
-    impedances = []
-
-    # Séparer les fréquences et les impédances
-    for row in data:
-        frequencies.append(row[0])
-        impedances.append(row[1])
-
-    peaks = []
-
-    # Identifier les pics d'impédance
-    for i in range(1, len(impedances) - 1):
-        if impedances[i] > impedances[i - 1] and impedances[i] > impedances[i + 1]:
-            peaks.append((impedances[i], frequencies[i]))
-
-    # Trier les pics par valeur d'impédance décroissante et prendre les 4 premiers
-    peaks.sort(reverse=True, key=lambda x: x[0])
-    peak_frequencies = [freq for _, freq in peaks[:4]]
-
-    return peak_frequencies
 
 
 def visualize_results():
-    num_files = int(input("Entrez le nombre de fichiers à analyser : "))
-    file_names = [input(f"Entrez le nom du fichier {i + 1} : ") for i in range(num_files)]
+    num_files = int(input("Enter the number of files to scan : "))
+    print('files available')
+    for root, dirs, files in os.walk('data'):
+        for file in files:
+            print(os.path.join(root, file))
+    print('(file name in the form: filename)')
+    file_names = [input(f"Enter the file name {i + 1} : ") for i in range(num_files)]
 
     results = []
 
@@ -106,7 +95,7 @@ def visualize_results():
 
     # Préparation des données pour le tableau
     table_data = []
-    headers = ["Fichier"] + [f"Pic {i + 1}" for i in range(4)]
+    headers = ["File"] + [f"Peak {i + 1}" for i in range(4)]
 
     for result in results:
         row = [result[0]] + result[1]
@@ -121,7 +110,10 @@ def visualize_results():
 
     # Ajuster la mise en page pour éviter les coupures
     fig.tight_layout()
-    plt.savefig('resultats.png', bbox_inches='tight')  # Sauvegarder l'image du tableau
+    title = input('table title : ')
+    png_title ='png/'+ title + '.png'
+    plt.savefig(png_title, bbox_inches='tight')  # Sauvegarder l'image du tableau
+    print('png file create')
 
 
 

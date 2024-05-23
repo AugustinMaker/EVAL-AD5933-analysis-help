@@ -1,10 +1,11 @@
 import csv
 import matplotlib.pyplot as plt
 import matplotlib
+from process import process_csv
 
 # Utiliser le backend 'Agg' de Matplotlib pour les environnements non interactifs
 matplotlib.use('Agg')
-
+'''
 def process_csv(file_name):
     csv_file = file_name + '.csv'
     data = []
@@ -22,7 +23,7 @@ def process_csv(file_name):
                 print(f"Erreur de conversion sur la ligne : {row}, erreur: {e}")
 
     return data
-
+'''
 def plot_graphs():
     while True:
         try:

@@ -1,15 +1,20 @@
 import csv
+import os
 
 def conversion(input_file, output_file):
     # Lire le fichier CSV
     with open(input_file, mode='r', newline='', encoding='utf-8') as infile:
         reader = csv.reader(infile)
         rows = list(reader)
-    print(rows)
+    #print(rows)
     # Modifier les données
     modified_rows = modification_function(rows)
 
     # Réenregistrer les données modifiées dans un nouveau fichier CSV
+    if not os.path.exists('data'):
+        os.makedirs('data')
+
+    output_file = 'data/' + output_file
     with open(output_file, mode='w', newline='', encoding='utf-8') as outfile:
         writer = csv.writer(outfile)
         writer.writerows(modified_rows)
