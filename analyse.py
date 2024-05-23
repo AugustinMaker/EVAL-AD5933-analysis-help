@@ -1,10 +1,32 @@
 import csv
 import matplotlib.pyplot as plt
 import matplotlib
+from conversion import conversion
 
 # Utiliser le backend 'Agg' de Matplotlib
 matplotlib.use('Agg')
 
+def interface ():
+    print("analysis aid for data from the EVAL AD5933 software")
+    print("___________________________________________________")
+    print("1 - Format the data")
+    print("2 - Isolate impedance peaks ")
+    print("3 - Plot impedance graphs ")
+    print("___________________________________________________")
+
+    x = input()
+
+    if x == "1" :
+        input_file = input("name input file")
+        output_file = input("name output file")
+        conversion(input_file, output_file)
+
+    if x == "2" :
+        ...
+    if x == "3" :
+        ...
+    else:
+        print ("invalid value")
 
 def process_csv(file_name):
     # Concaténer le nom de fichier avec ".csv"
