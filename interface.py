@@ -1,5 +1,5 @@
 from file_choice import file_choice
-
+from conversion import conversion
 
 def interface():
     print("analysis aid for data from the EVAL AD5933 software")
@@ -14,7 +14,7 @@ def interface():
 
     if x == "1" :
         print("Format data")
-        file_choice('data')
+        conversion()
         return(0)
     if x == "2" :
         print("Isolate")

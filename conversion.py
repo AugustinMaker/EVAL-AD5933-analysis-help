@@ -1,23 +1,36 @@
 import csv
 import os
+from file_choice import file_choice
 
-def conversion(input_file, output_file):
-    # Lire le fichier CSV
-    with open(input_file, mode='r', newline='', encoding='utf-8') as infile:
-        reader = csv.reader(infile)
-        rows = list(reader)
-    #print(rows)
-    # Modifier les données
-    modified_rows = modification_function(rows)
+def conversion():
+    # Appeler la fonction file_choice pour obtenir la liste des fichiers à modifier
+    input_files = file_choice('data')
+    if not input_files:
+        return
 
-    # Réenregistrer les données modifiées dans un nouveau fichier CSV
-    if not os.path.exists('data'):
-        os.makedirs('data')
+    # Créer le dossier 'format_data' s'il n'existe pas
+    output_folder = 'format_data'
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
 
-    output_file = 'data/' + output_file
-    with open(output_file, mode='w', newline='', encoding='utf-8') as outfile:
-        writer = csv.writer(outfile)
-        writer.writerows(modified_rows)
+    for input_file in input_files:
+        # Lire le fichier CSV
+        input_path = os.path.join('data', input_file)
+        with open(input_path, mode='r', newline='', encoding='utf-8') as infile:
+            reader = csv.reader(infile)
+            rows = list(reader)
+
+        # Modifier les données
+        modified_rows = modification_function(rows)
+
+        # Réenregistrer les données modifiées dans un nouveau fichier CSV
+        output_file = f'F_{input_file}'
+        output_path = os.path.join(output_folder, output_file)
+        with open(output_path, mode='w', newline='', encoding='utf-8') as outfile:
+            writer = csv.writer(outfile)
+            writer.writerows(modified_rows)
+
+        print(f"Fichier '{input_file}' modifié et enregistré sous '{output_path}'.")
 
 
 def modification_function(rows):
@@ -46,7 +59,6 @@ def modification_function(rows):
         new_line = ''
         comma_count = 0
 
-
         for i, char in enumerate(line):
             if char == ',':
                 if comma_count in indices_to_replace:
@@ -60,3 +72,5 @@ def modification_function(rows):
         modified_row = new_line.split(',')
         modified_rows.append(modified_row)
     return modified_rows
+
+
