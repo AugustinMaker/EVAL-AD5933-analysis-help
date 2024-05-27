@@ -44,6 +44,10 @@ def graph(data_dict, graph_name, folder_name, horizontal_spacing=0.2, vertical_s
     plt.show()
 
     # Sauvegarder la mosaïque de graphiques dans un fichier PNG
-    output_file = os.path.join(folder_name, f"{graph_name}.png")
+    output_folder = os.path.join("output", folder_name)
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
+    output_file = os.path.join(output_folder, f"{graph_name}.png")
     fig.savefig(output_file)
     print(f"Graphique sauvegardé sous {output_file}")
