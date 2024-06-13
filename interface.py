@@ -1,12 +1,13 @@
 from file_choice import file_choice
 from conversion import conversion
+from mosaique import mosaique
 
 def interface():
     print("analysis aid for data from the EVAL AD5933 software")
     print("___________________________________________________")
     print("1 - Format the data")
-    print("2 - Isolate impedance peaks ")
-    print("3 - Plot impedance graphs ")
+    print("2 - Plot impedance graphs ")
+    print("3 - Peak analysis ")
     print("4 - Exit ")
     print("___________________________________________________")
 
@@ -17,7 +18,7 @@ def interface():
         conversion()
         return(0)
     if x == "2" :
-        print("Isolate")
+        mosaique()
         return(0)
     if x == "3" :
         print("plot")

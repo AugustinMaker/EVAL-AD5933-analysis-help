@@ -25,7 +25,7 @@ def file_choice(data_folder):
     # Demander le nombre de fichiers à modifier
     while True:
         try:
-            num_files_to_modify = int(input("Combien de fichiers souhaitez-vous modifier ? "))
+            num_files_to_modify = int(input("Combien de fichiers souhaitez-vous selectionner ? "))
             if num_files_to_modify > len(files):
                 print(f"Le nombre entré est supérieur au nombre de fichiers présents ({len(files)}).")
             else:
@@ -37,13 +37,14 @@ def file_choice(data_folder):
     files_to_modify = []
     for i in range(num_files_to_modify):
         while True:
-            file_name = input(f"Entrez le nom du fichier {i + 1} à modifier : ")
+            file_name = input(f"Entrez le nom du fichier {i + 1} à selectionner : ")
             if file_name in files:
                 files_to_modify.append(file_name)
                 break
             else:
                 print(f"Le fichier '{file_name}' n'existe pas dans le dossier 'data'. Veuillez entrer un nom valide.")
 
-    print("Les fichiers à modifier sont :")
+    print("Les fichiers selectionner sont :")
     for file in files_to_modify:
         print(file)
+    return files_to_modify

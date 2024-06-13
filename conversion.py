@@ -1,11 +1,9 @@
-import csv
 import os
-from file_choice import file_choice
+import csv
 
-def conversion():
-    # Appeler la fonction file_choice pour obtenir la liste des fichiers à modifier
-    input_files = file_choice('data')
-    if not input_files:
+
+def conversion(file_paths):
+    if not file_paths:
         return
 
     # Créer le dossier 'format_data' s'il n'existe pas
@@ -13,10 +11,9 @@ def conversion():
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
-    for input_file in input_files:
+    for file_path in file_paths:
         # Lire le fichier CSV
-        input_path = os.path.join('data', input_file)
-        with open(input_path, mode='r', newline='', encoding='utf-8') as infile:
+        with open(file_path, mode='r', newline='', encoding='utf-8') as infile:
             reader = csv.reader(infile)
             rows = list(reader)
 
@@ -24,14 +21,14 @@ def conversion():
         modified_rows = modification_function(rows)
 
         # Réenregistrer les données modifiées dans un nouveau fichier CSV
-        output_file = f'F_{input_file}'
+        file_name = os.path.basename(file_path)
+        output_file = f'F_{file_name}'
         output_path = os.path.join(output_folder, output_file)
         with open(output_path, mode='w', newline='', encoding='utf-8') as outfile:
             writer = csv.writer(outfile)
             writer.writerows(modified_rows)
 
-        print(f"Fichier '{input_file}' modifié et enregistré sous '{output_path}'.")
-
+        print(f"Fichier '{file_name}' modifié et enregistré sous '{output_path}'.")
 
 def modification_function(rows):
     modified_rows = []
@@ -72,5 +69,3 @@ def modification_function(rows):
         modified_row = new_line.split(',')
         modified_rows.append(modified_row)
     return modified_rows
-
-
