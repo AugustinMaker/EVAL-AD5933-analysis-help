@@ -5,9 +5,9 @@ def graph(data_dict, graph_name, folder_name, horizontal_spacing=0.2, vertical_s
     # Utiliser le backend TkAgg pour s'assurer que plt.show() fonctionne
     plt.switch_backend('TkAgg')
 
-    # Vérifier si le dossier existe, sinon le créer
-    if not os.path.exists(folder_name):
-        os.makedirs(folder_name)
+    # Vérifier si le dossier de sortie existe, sinon le créer
+    output_folder = os.path.join("output", folder_name)
+    os.makedirs(output_folder, exist_ok=True)
 
     # Nombre de graphiques
     num_graphs = len(data_dict)
@@ -41,13 +41,13 @@ def graph(data_dict, graph_name, folder_name, horizontal_spacing=0.2, vertical_s
     plt.tight_layout()
 
     # Afficher la mosaïque de graphiques
-    plt.show()
+    #plt.show()
+
+    # Assurer que le fichier de sortie a l'extension correcte
+    if not graph_name.endswith('.png'):
+        graph_name += '.png'
 
     # Sauvegarder la mosaïque de graphiques dans un fichier PNG
-    output_folder = os.path.join("output", folder_name)
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
-
-    output_file = os.path.join(output_folder, f"{graph_name}.png")
+    output_file = os.path.join(output_folder, graph_name)
     fig.savefig(output_file)
     print(f"Graphique sauvegardé sous {output_file}")

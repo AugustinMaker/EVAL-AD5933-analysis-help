@@ -1,18 +1,15 @@
 
 from conversion import conversion
+from mosaique import standard_mosaique
 import flet as ft
-from flet import Page, View, AppBar, Text, ElevatedButton, colors
-import os
-import csv
+from flet import Page, View, AppBar, Text, ElevatedButton, TextField, colors, Column, Image
 
 def main(page: Page):
     print("Initial route:", page.route)
     history_stack = []
 
     analysis_name_input = ft.TextField(label="Analysis name")
-
-    ###################################################################################################
-#La suite est pas du tout opti mais j'ai mal a la tete et la grosse flemme donc to do
+    result_column = ft.Ref[Column]()
 
     def pick_files_result_format(e: ft.FilePickerResultEvent):
         file_paths = [f.path for f in e.files]
@@ -28,7 +25,7 @@ def main(page: Page):
             ", ".join([f.name for f in e.files]) if e.files else "Cancelled!"
         )
         selected_files.update()
-        conversion(file_paths)  # Appel de la fonction conversion avec les fichiers sélectionnés
+
 
     pick_files_dialog_format = ft.FilePicker(on_result=pick_files_result_format)
     pick_files_dialog_standard = ft.FilePicker(on_result=pick_files_result_standard)
@@ -128,6 +125,19 @@ def main(page: Page):
                     Text("Temporal Evolution page!")
                 ])
             )
+        elif page.route == "/standard_analysis/result":
+            page.views.append(
+                View("/standard_analysis/result", [
+                    create_app_bar("Analysis Result"),
+                    ft.Image(
+                        src=f"/output/bernielo/bernieloFI.png",
+                        width=100,
+                        height=100,
+                        fit=ft.ImageFit.CONTAIN,
+                    ),
+                    ft.Row(expand=1, wrap=False, scroll="always")
+                ])
+            )
         page.update()
 
     def view_pop(e):
@@ -165,6 +175,31 @@ def main(page: Page):
         history_stack.append(page.route)
         page.go("/temporal_evolution")
 
+    def start_standard_analysis(e):
+        analysis_name = analysis_name_input.value.strip()
+        if not analysis_name:
+            print("Veuillez entrer un nom d'analyse valide.")
+            return
+
+        selected_filenames = selected_files.value.split(", ")
+        if not selected_filenames or selected_filenames[0] == "Cancelled!":
+            print("Veuillez sélectionner des fichiers.")
+            return
+
+        # Appel de la fonction standard_mosaique
+        image_files = standard_mosaique(selected_filenames, analysis_name)
+
+        # Mise à jour de la colonne des résultats
+        if result_column.current:
+            result_column.current.controls.clear()
+            for image_file in image_files:
+                result_column.current.controls.append(Image(src=f"/path/to/your/images/{image_file}"))
+            result_column.current.update()
+
+        # Naviguer vers la page de résultats
+        history_stack.append(page.route)
+        page.go("/standard_analysis/result")
+
     page.on_route_change = route_change
     page.on_view_pop = view_pop
 
@@ -174,23 +209,4 @@ def main(page: Page):
 
     page.go(page.route)
 
-    def start_standard_analysis(e):
-        analysis_name = analysis_name_input.value.strip()  # Récupère le nom d'analyse (sans espaces superflus)
-        if not analysis_name:
-            print("Veuillez entrer un nom d'analyse valide.")
-            return
-
-        selected_filenames = selected_files.value.split(", ")  # Récupère les noms des fichiers sélectionnés
-
-        # Traitez les fichiers et le nom d'analyse comme requis
-        # Exemple : Affichage pour démonstration
-        print(f"Nom d'analyse : {analysis_name}")
-        print(f"Fichiers sélectionnés : {selected_filenames}")
-
-        # Ajoutez ici votre logique pour utiliser les fichiers et le nom d'analyse comme requis
-
-
 ft.app(target=main)
-
-
-
